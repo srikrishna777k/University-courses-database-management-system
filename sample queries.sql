@@ -1,4 +1,3 @@
-
 Use university_db;
 
 --- Fetch student id, name, course, marks and grades for the exams
@@ -43,17 +42,24 @@ inner join Student
 on Student.ID = Student_Exam_Status.Student_ID
 inner join Person
 on Person.id = Student.Person_ID)
-select no,avg(score) from T1 
+select avg(score) median from T1 
 group by no
 having no between (select ceiling(cast(count(*) as decimal(8,2))/2) from T1) and (select ceiling((cast(count(*) as decimal(8,2))+1)/2) from T1);
 
---- print details for all students who is placed in which company and it's CTC
-
+--- Stored procedure to print details for all students who is placed in a specific company and it's CTC
+create procedure placement_details
+@company varchar(30)
+as
+Begin
 Select pf.ID,pf.Student_ID as Student,c.name as CompanyName,j.CTC from placement_offers as pf 
 inner join job_salary as j
 on pf.Job_Salary_ID=j.ID
 inner join company as c
-on j.Company_ID=c.ID;
+on j.Company_ID=c.ID
+where c.name = @company
+End;
+
+execute placement_details 'AMAZON';
 
 --- Write query to count no of courses and lectures are there for particular program
 
