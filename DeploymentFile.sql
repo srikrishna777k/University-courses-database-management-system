@@ -1,6 +1,19 @@
-Create database university_db;
+---Checking if database exists else and dropping it if present else creating from scratch.
+
+IF EXISTS(SELECT name FROM master.sys.sysdatabases WHERE name='university_db')
+BEGIN
+   DROP DATABASE university_db
+END
 GO
-Use university_db;
+IF NOT EXISTS(SELECT name FROM master.sys.sysdatabases WHERE name='university_db')
+BEGIN
+   CREATE DATABASE university_db
+END
+GO
+USE university_db
+GO
+
+---Creating and loading tables with sample data
 
 CREATE TABLE Login_Role(ID varchar(6) not null,Description varchar(30) not null,PRIMARY KEY (ID));
 
